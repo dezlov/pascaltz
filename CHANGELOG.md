@@ -2,23 +2,33 @@
 
 This change log contains the highlights of major changes. For details on all finer changes please check the commits history.
 
+## Latest development version
+
+Enhancements:
+
+* Compatibility changes for building the test runner project with FPC 3.2.0.
+
+Bugfixes:
+
+* Handle unabbreviated month names in Zone and Rule definitions. For example, "Mexico" rule definition in tzdata 2024b.
+
 ## 2.2.0 (2020-03-18)
 
 Enhancements:
 
 - Replaced `.rc` script by `.res` resource file in order to avoid issues with `windres` on some platforms.
-- Added additional high-dpi component icons.
+- Added high-DPI component icons.
 
 Bugfixes:
 
-- Handle weekday macros which fall into another month. For example, "Asia/Hong_Kong" zone in tzdata2019b includes weekday macros "Sun>=28" and "Sun>=31".
+- Handle weekday macros which fall into another month. For example, "Asia/Hong_Kong" zone in tzdata 2019b includes weekday macros "Sun>=28" and "Sun>=31".
 
 ## 2.1.3 (2019-08-15)
 
 Bugfixes:
 
 - Extended allowed time specification from 24:00:00 to 25:00:00. The 25:00:00 time introduced in tzdata 2018f, see "Rule Japan 1948 1951".
-- Handle negative static DST offset in Zone definition. For example, see "Europe/Prague" zone definition in tzdata 2018g.
+- Handle negative static DST offset in Zone definition. For example, "Europe/Prague" zone definition in tzdata 2018g.
 
 ## 2.1.2 (2018-04-05)
 
