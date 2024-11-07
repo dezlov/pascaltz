@@ -37,7 +37,11 @@ type
   protected
     procedure AppendLongOpts; override;
     procedure WriteCustomHelp; override;
+    {$IF FPC_FULLVERSION >= 30200}
+    function ParseOptions: Boolean; override;
+    {$ELSE}
     procedure ParseOptions; override;
+    {$ENDIF}
     procedure DoRun; override;
     procedure DoTestRun(ATest: TTest); override;
   end;
@@ -60,9 +64,13 @@ begin
   WriteLn(Format('  --%:-16s  %s', [OptionVectorsDir + '=<dir>', 'Directory for test vectors.']));
 end;
 
+{$IF FPC_FULLVERSION >= 30200}
+function TApplication.ParseOptions: Boolean;
+{$ELSE}
 procedure TApplication.ParseOptions;
+{$ENDIF}
 begin
-  inherited ParseOptions;
+  {$IF FPC_FULLVERSION >= 30200}Result := {$ENDIF}inherited ParseOptions;
 
   PrintInfo := Self.FormatParam in [fPlain, fPlainNoTiming];
   PauseOnExit := Self.HasOption(OptionPause);

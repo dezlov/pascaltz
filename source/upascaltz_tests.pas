@@ -78,15 +78,15 @@ begin
   if Assigned(TZ) then
     FreeAndNil(TZ);
   if not DirectoryExists(DatabaseDir) then
-    Fail(Format('Database directory "%s" does not exist. Check test setup.', [DatabaseDir]));
+    raise Exception.Create(Format('Database directory "%s" does not exist. Check test setup.', [DatabaseDir]));
   if not DirectoryExists(VectorsDir) then
-    Fail(Format('Vectors directory "%s" does not exist. Check test setup.', [VectorsDir]));
+    raise Exception.Create(Format('Vectors directory "%s" does not exist. Check test setup.', [VectorsDir]));
   TZ := TPascalTZ.Create;
   TZ.ParseDatabaseFromDirectory(DatabaseDir);
   if TZ.CountZones = 0 then
-    Fail(Format('No zones loaded, check database direcory "%s".', [DatabaseDir]));
+    raise Exception.Create(Format('No zones loaded, check database direcory "%s".', [DatabaseDir]));
   if TZ.CountRules = 0 then
-    Fail(Format('No rules loaded, check database direcory "%s".', [DatabaseDir]));
+    raise Exception.Create(Format('No rules loaded, check database direcory "%s".', [DatabaseDir]));
 end;
 
 procedure TTZTestSetup.OneTimeTearDown;
@@ -99,13 +99,13 @@ procedure TTZTestCaseVectors.SetUp;
 begin
   TZ := TTZTestSetup.TZ;
   if not Assigned(TZ) then
-    Fail('Timezone database object is not assigned. Check test setup.');
+    raise Exception.Create('Timezone database object is not assigned. Check test setup.');
   Vectors := TTZTestVectorRepository.Create;
   Vectors.LoadFromDirectory(TTZTestSetup.VectorsDir, TTZTestSetup.VectorFileMask);
   TTZTestSetup.LoadedVectorFiles.AddStrings(Vectors.LoadedFiles);
   TTZTestSetup.LoadedVectorCount += Vectors.Count;
   if Vectors.Count = 0 then
-    Fail(Format('No test vectors loaded, check vectors direcory "%s".', [TTZTestSetup.VectorsDir]));
+    raise Exception.Create(Format('No test vectors loaded, check vectors direcory "%s".', [TTZTestSetup.VectorsDir]));
 end;
 
 procedure TTZTestCaseVectors.TearDown;
