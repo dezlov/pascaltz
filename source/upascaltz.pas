@@ -514,7 +514,7 @@ begin
 
     // In month...
     TmpWord := AIterator.GetNextWord;
-    NewRule.InMonth := MonthNumberFromShortName(TmpWord);
+    NewRule.InMonth := MonthNumberFromName(TmpWord);
 
     // On Rule...
     TmpWord := AIterator.GetNextWord;

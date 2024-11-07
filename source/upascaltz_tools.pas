@@ -29,7 +29,7 @@ function TZDateToPascalDate(const ADate: TTZDateTime): TDateTime;
 function PascalDateToTZDate(const ADate: TDateTime): TTZDateTime;
 function MakeTZDate(const Year, Month, Day, SecsInDay: Integer): TTZDateTime; inline;
 function MonthNumberToShortName(const AMonthNumber: Integer): AsciiString;
-function MonthNumberFromShortName(const AMonthName: AsciiString): TTZMonth;
+function MonthNumberFromName(const AMonthName: AsciiString): TTZMonth;
 function MinDate(const ADate, BDate: TTZDateTime): TTZDateTime;
 function MaxDate(const ADate, BDate: TTZDateTime): TTZDateTime;
 function CompareDates(const ADate,BDate: TTZDateTime): Integer;
@@ -79,6 +79,10 @@ const
   TTZShortMonthNames: array [TTZMonth] of AsciiString = (
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+  TTZLongMonthNames: array [TTZMonth] of AsciiString = (
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December');
+
 
 implementation
 
@@ -314,14 +318,20 @@ begin
     raise TTZException.CreateFmt('Invalid month number "%s"', [IntToStr(AMonthNumber)]);
 end;
 
-function MonthNumberFromShortName(const AMonthName: AsciiString): TTZMonth;
+function MonthNumberFromName(const AMonthName: AsciiString): TTZMonth;
 var
   AMonthNumber: TTZMonth;
 begin
   for AMonthNumber := Low(TTZShortMonthNames) to High(TTZShortMonthNames) do
     if AMonthName = TTZShortMonthNames[AMonthNumber] then
       Exit(AMonthNumber);
-  raise TTZException.CreateFmt('Invalid short month name "%s"', [AMonthName]);
+
+  // Unabbreviated month names first appeared in tzdata 2024b.
+  for AMonthNumber := Low(TTZLongMonthNames) to High(TTZLongMonthNames) do
+    if AMonthName = TTZLongMonthNames[AMonthNumber] then
+      Exit(AMonthNumber);
+
+  raise TTZException.CreateFmt('Invalid month name "%s"', [AMonthName]);
 end;
 
 function FirstDayOfMonth(const ADate: TTZDateTime): TTZDateTime;
@@ -471,7 +481,7 @@ begin
   // Month
   TmpWord := AIterator.GetNextWord;
   if TmpWord = '' Then Exit;
-  Result.Month := MonthNumberFromShortName(TmpWord);
+  Result.Month := MonthNumberFromName(TmpWord);
 
   // Day
   TmpWord := AIterator.GetNextWord;
